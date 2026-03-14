@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CONVEX_URL } from '$lib/services/convex-env';
+	import { CONVEX_URL } from '$lib/convex-env';
 	import { getClerkContext } from '$lib/stores/clerk.svelte';
 	import { setupConvex, useConvexClient } from 'convex-svelte';
 

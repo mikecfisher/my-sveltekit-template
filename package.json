@@ -40,6 +40,7 @@
 		"vite-plugin-devtools-json": "^1.0.0"
 	},
 	"dependencies": {
+		"@clerk/backend": "^3.2.0",
 		"@clerk/clerk-js": "^6.3.0",
 		"@clerk/ui": "^1.2.1",
 		"@effect/platform-node": "^4.0.0-beta.31",

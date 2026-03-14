@@ -3,8 +3,9 @@ import { Cause, Data, Effect, Exit, Layer, ManagedRuntime } from 'effect';
 import { NodeServices } from '@effect/platform-node';
 import { error } from '@sveltejs/kit';
 import { ConvexError, ConvexPrivateService } from './services/convex';
+import { ClerkError, ClerkService } from './services/clerk';
 
-const appLayer = Layer.mergeAll(NodeServices.layer, ConvexPrivateService.layer);
+const appLayer = Layer.mergeAll(NodeServices.layer, ConvexPrivateService.layer, ClerkService.layer);
 
 export const runtime = ManagedRuntime.make(appLayer);
 
@@ -65,7 +66,10 @@ const serializeUnknown = (value: unknown): unknown => {
 };
 
 const toPublicError = (
-	errorValue: Pick<GenericError | ConvexError, 'message' | 'kind' | 'timestamp' | 'traceId'>
+	errorValue: Pick<
+		GenericError | ConvexError | ClerkError,
+		'message' | 'kind' | 'timestamp' | 'traceId'
+	>
 ) => ({
 	message: errorValue.message,
 	kind: errorValue.kind,
@@ -73,7 +77,7 @@ const toPublicError = (
 	traceId: errorValue.traceId
 });
 
-const logTaggedError = (errorValue: GenericError | ConvexError) => {
+const logTaggedError = (errorValue: GenericError | ConvexError | ClerkError) => {
 	if (errorValue instanceof ConvexError) {
 		console.error('Convex error', {
 			traceId: errorValue.traceId,
@@ -82,6 +86,18 @@ const logTaggedError = (errorValue: GenericError | ConvexError) => {
 			operation: errorValue.operation,
 			functionName: errorValue.functionName,
 			componentPath: errorValue.componentPath,
+			message: errorValue.message,
+			cause: serializeUnknown(errorValue.cause)
+		});
+
+		return;
+	}
+
+	if (errorValue instanceof ClerkError) {
+		console.error('Clerk error', {
+			traceId: errorValue.traceId,
+			kind: errorValue.kind,
+			timestamp: errorValue.timestamp,
 			message: errorValue.message,
 			cause: serializeUnknown(errorValue.cause)
 		});
@@ -102,8 +118,8 @@ const logTaggedError = (errorValue: GenericError | ConvexError) => {
 export const effectRunner = async <T>(
 	effect: Effect.Effect<
 		T,
-		GenericError | ConvexError,
-		NodeServices.NodeServices | ConvexPrivateService
+		GenericError | ConvexError | ClerkError,
+		NodeServices.NodeServices | ConvexPrivateService | ClerkService
 	>
 ) => {
 	const exit = await runtime.runPromiseExit(effect);
@@ -114,7 +130,11 @@ export const effectRunner = async <T>(
 		// logging step
 		for (const reason of cause.reasons) {
 			if (Cause.isFailReason(reason)) {
-				if (reason.error instanceof GenericError || reason.error instanceof ConvexError) {
+				if (
+					reason.error instanceof GenericError ||
+					reason.error instanceof ConvexError ||
+					reason.error instanceof ClerkError
+				) {
 					logTaggedError(reason.error);
 				} else {
 					console.error('Unhandled effect error', {
@@ -137,6 +157,10 @@ export const effectRunner = async <T>(
 		if (firstError._tag === 'Some') {
 			if (firstError.value instanceof ConvexError) {
 				return error(500, toPublicError(firstError.value));
+			}
+
+			if (firstError.value instanceof ClerkError) {
+				return error(401, toPublicError(firstError.value));
 			}
 
 			if (firstError.value instanceof GenericError) {

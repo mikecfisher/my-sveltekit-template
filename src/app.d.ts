@@ -7,7 +7,7 @@ declare global {
 			readonly message: string;
 			readonly kind: string;
 			readonly timestamp: number;
-			readonly traceId: string;
+			readonly traceId?: string;
 		}
 		// interface Locals {}
 		// interface PageData {}
