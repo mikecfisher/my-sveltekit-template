@@ -12,7 +12,7 @@ const demoRemote = Effect.gen(function* () {
 	const res = yield* convex.query({
 		func: api.private.demo.privateDemoQuery,
 		args: {
-			username: 'test'
+			username: 'hello there'
 		}
 	});
 

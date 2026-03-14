@@ -98,6 +98,12 @@
 			<div class="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
 				<h1 class="text-lg font-semibold tracking-tight">Conferences</h1>
 				<div class="flex items-center gap-3">
+					<a
+						href="/app/references"
+						class="rounded-md px-3 py-1.5 text-sm font-medium text-stone-500 transition-colors hover:bg-stone-100 hover:text-stone-700"
+					>
+						References
+					</a>
 					<button
 						onclick={() => {
 							resetForm();
