@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>My Sveltekit Template</title>
+	<title>Conference Tracker</title>
 </svelte:head>
 
 <ClerkWrapper>
