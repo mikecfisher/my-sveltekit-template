@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Bash(bun pm:*)",
+      "Bash(bun install:*)",
+      "Bash(jq:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
