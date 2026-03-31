@@ -17,6 +17,9 @@ SvelteKit template with Convex (backend/database), Clerk (auth), Effect v4 (type
 - `bun run check` — svelte-check + TypeScript validation
 - `bun run build` — production build
 
+- `bun run test` — run tests (Vitest)
+- `bun run test:watch` — run tests in watch mode
+
 After making changes, run: `bun run convex:gen` (if convex changed), then `bun run lint`, `bun run format`, `bun run check`.
 
 Requires [portless](https://github.com/vercel-labs/portless) installed globally: `npm install -g portless`. Run `portless proxy start --https` once for HTTPS cert setup.

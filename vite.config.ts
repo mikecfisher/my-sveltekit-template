@@ -1,6 +1,7 @@
 import devtoolsJson from 'vite-plugin-devtools-json';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { svelteTesting } from '@testing-library/svelte/vite';
 import path from 'node:path';
 import { convexLocal } from 'convex-vite-plugin';
 import { defineConfig, loadEnv, type PluginOption } from 'vite';
@@ -60,11 +61,16 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		envDir: workspaceRoot,
-		plugins,
+		plugins: [...plugins, svelteTesting()],
 		resolve: {
 			alias: {
 				'@': path.resolve('./src')
 			}
+		},
+		test: {
+			environment: 'jsdom',
+			setupFiles: ['./vitest-setup.ts'],
+			include: ['src/**/*.{test,spec}.{js,ts}']
 		},
 		server: {
 			fs: {
