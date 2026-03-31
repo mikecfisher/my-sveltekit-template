@@ -2,8 +2,6 @@
 	import { remoteDemoQuery } from '$lib/remote/demo.remote';
 
 	const stuff = await remoteDemoQuery();
-
-	$inspect(stuff);
 </script>
 
 <h1>Welcome to SvelteKit</h1>
