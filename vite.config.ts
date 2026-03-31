@@ -68,8 +68,7 @@ export default defineConfig(({ mode }) => {
 			}
 		},
 		test: {
-			environment: 'jsdom',
-			setupFiles: ['./vitest-setup.ts'],
+			environment: 'happy-dom',
 			include: ['src/**/*.{test,spec}.{js,ts}']
 		},
 		server: {
