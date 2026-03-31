@@ -49,6 +49,12 @@ Requires [portless](https://github.com/vercel-labs/portless) installed globally:
 
 See `.env.example` for required vars. Key groups: CONVEX (deployment URL, bridge key) and CLERK (JWT issuer, publishable key, secret key).
 
+## TanStack Libraries
+
+- **Query** (`@tanstack/svelte-query`) — `QueryClientProvider` is in the root layout with SSR disabled. Use `createQuery` / `createMutation` in components. Note: Convex data uses `convex-svelte` (`useQuery`), not TanStack Query.
+- **Form** (`@tanstack/svelte-form`) — per-component, no provider needed. Use `createForm` with `form.Field` snippets for validation.
+- **Hotkeys** (`@tanstack/svelte-hotkeys`) — per-component, no provider needed. Use `createHotkey` for global shortcuts, `createHotkeyAttachment` for element-scoped via `{@attach}`.
+
 ## Path Alias
 
 `@` resolves to `./src` (configured in vite.config.ts).
